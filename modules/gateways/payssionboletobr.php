@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_boleto_br_config() {
+function payssionboletobr_config() {
 	return Payssion::getConfig('Boleto');
 }
 
-function payssion_boleto_br_link($params) {
-	return Payssion::getConfig($params, 'boleto_br');
+function payssionboletobr_link($params) {
+	return Payssion::getLink($params, 'boleto_br');
 }
 ?>

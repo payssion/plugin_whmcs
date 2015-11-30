@@ -11,12 +11,12 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_bitcoin_config() {
+function payssionbitcoin_config() {
 	basename(__FILE__, '.php');
 	return Payssion::getConfig('Bitcoin');
 }
 
-function payssion_bitcoin_link($params) {
-	return Payssion::getConfig($params, 'bitcoin');
+function payssionbitcoin_link($params) {
+	return Payssion::getLink($params, 'bitcoin');
 }
 ?>

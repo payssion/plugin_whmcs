@@ -16,7 +16,9 @@ Release date: 11/16/2015
 @require_once ("../../../includes/invoicefunctions.php");
 @require_once ("../payssion/payssion.php");
 
-$gatewaymodule = "payssion_" . _POST['pm_id'];
+$pm_id = _POST['pm_id']
+$pm_name = str_replace('_', '', $pm_id);
+$gatewaymodule = "payssion" . $pm_name;
 
 $GATEWAY = getGatewayVariables($gatewaymodule);
 
@@ -26,7 +28,6 @@ if (!$GATEWAY || !$GATEWAY["type"]) {
 }
 
 // Assign payment notification values to local variables
-$pm_id = $_POST['pm_id'];
 $amount = $_POST['amount'];
 $currency = $_POST['currency'];
 $track_id = $_POST['track_id'];

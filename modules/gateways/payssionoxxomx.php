@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_oxxo_mx_config() {
+function payssionoxxomx_config() {
 	return Payssion::getConfig('Oxxo');
 }
 
-function payssion_oxxo_mx_link($params) {
-	return Payssion::getConfig($params, 'oxxo_mx');
+function payssionoxxomx_link($params) {
+	return Payssion::getLink($params, 'oxxo_mx');
 }
 ?>

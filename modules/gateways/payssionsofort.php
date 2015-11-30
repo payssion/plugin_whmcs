@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_sofort_config() {
+function payssionsofort_config() {
 	return Payssion::getConfig('SOFORT Banking');
 }
 
-function payssion_sofort_link($params) {
-	return Payssion::getConfig($params, 'sofort');
+function payssionsofort_link($params) {
+	return Payssion::getLink($params, 'sofort');
 }
 ?>

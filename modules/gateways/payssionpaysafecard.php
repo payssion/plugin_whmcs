@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_paysafecard_config() {
+function payssionpaysafecard_config() {
 	return Payssion::getConfig('Paysafecard');
 }
 
-function payssion_paysafecard_link($params) {
-	return Payssion::getConfig($params, 'paysafecard');
+function payssionpaysafecard_link($params) {
+	return Payssion::getLink($params, 'paysafecard');
 }
 ?>

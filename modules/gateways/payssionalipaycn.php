@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_alipay_cn_config() {
+function payssionalipaycn_config() {
 	return Payssion::getConfig('Alipay');
 }
 
-function payssion_alipay_cn_link($params) {
-	return Payssion::getConfig($params, 'alipay_cn');
+function payssionalipaycn_link($params) {
+	return Payssion::getLink($params, 'alipay_cn');
 }
 ?>

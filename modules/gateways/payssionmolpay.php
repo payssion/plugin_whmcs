@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_molpay_config() {
+function payssionmolpay_config() {
 	return Payssion::getConfig('MOLPay');
 }
 
-function payssion_molpay_link($params) {
-	return Payssion::getConfig($params, 'molpay');
+function payssionmolpay_link($params) {
+	return Payssion::getLink($params, 'molpay');
 }
 ?>

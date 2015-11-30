@@ -11,10 +11,10 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_cashu_config() {
+function payssioncashu_config() {
 	return Payssion::getConfig('CashU');
 }
-function payssion_cashu_link($params) {
-	return Payssion::getConfig($params, 'cashu');
+function payssioncashu_link($params) {
+	return Payssion::getLink($params, 'cashu');
 }
 ?>

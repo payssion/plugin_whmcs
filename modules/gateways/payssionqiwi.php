@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssion_qiwi_config() {
+function payssionqiwi_config() {
 	return Payssion::getConfig('QIWI');
 }
 
-function payssion_qiwi_link($params) {
-	return Payssion::getConfig($params, 'qiwi');
+function payssionqiwi_link($params) {
+	return Payssion::getLink($params, 'qiwi');
 }
 ?>

@@ -37,9 +37,9 @@ class Payssion {
 		$address = $params['clientdetails']['address1'].' '.$params['clientdetails']['address2'];
 		$url = '';
 		if ($params["payssion_testmode_$pm_id"] == 'on') {
-			$url = 'https://www.payssion.com/payment/create.html';
-		} else {
 			$url = 'http://sandbox.payssion.com/payment/create.html';
+		} else {
+			$url = 'https://www.payssion.com/payment/create.html';
 		}
 		
 		$api_key = self::$_api_key;
@@ -62,9 +62,8 @@ class Payssion {
 		
 		$arr = array($api_key, $pm_id, $amount, $currency,
 				$track_id, '', $secret_key);
-		$api_sig = implode('|', $arr);
+		$api_sig = md5(implode('|', $arr));
 		
-		$code =
 		$code = '<form method="post" action="' . $url . '">
 		<input type="hidden" name="source" value="'.$source.'" />
 		<input type="hidden" name="api_key" value="'.$api_key.'" />
