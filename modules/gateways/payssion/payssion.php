@@ -22,7 +22,7 @@ class Payssion {
 		$configarray = array(
 		"FriendlyName" => array(
 			"Type" => "System",
-			"Value" => $pm_name . "via Payssion"
+			"Value" => " $pm_name via Payssion"
 		),
 		"testmode" => array(
 				"FriendlyName" => "Test Mode", 

@@ -12,7 +12,6 @@ Release date: 11/16/2015
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
 function payssion_qiwi_config() {
-	basename(__FILE__, '.php');
 	return Payssion::getConfig('QIWI');
 }
 
