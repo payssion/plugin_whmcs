@@ -10,17 +10,17 @@ Release date: 11/16/2015
 */
 
 @require_once ("../../../init.php");
-@require_once ("../../../dbconnect.php");
 @require_once ("../../../includes/functions.php");
 @require_once ("../../../includes/gatewayfunctions.php");
 @require_once ("../../../includes/invoicefunctions.php");
 @require_once ("../payssion/payssion.php");
 
-$pm_id = _POST['pm_id']
+$pm_id = $_POST['pm_id'];
 $pm_name = str_replace('_', '', $pm_id);
-$gatewaymodule = "payssion" . $pm_name;
 
-$GATEWAY = getGatewayVariables($gatewaymodule);
+$gatewayModuleName = "payssion" . $pm_name;
+
+$GATEWAY = getGatewayVariables($gatewayModuleName);
 
 if (!$GATEWAY || !$GATEWAY["type"]) {
 	logTransaction('PAYSSION', '', 'Module Not Activated');
@@ -33,7 +33,7 @@ $currency = $_POST['currency'];
 $track_id = $_POST['track_id'];
 $sub_track_id = $_POST['sub_track_id'];
 $state = $_POST['state'];
-$transid = $_POST['transacion_id'];
+$transid = $_POST['transaction_id'];
 $fee = $_POST['total'] - $_POST['net'];
 
 $check_array = array(
@@ -47,31 +47,27 @@ $check_array = array(
 		Payssion::$_secret_key
 );
 $check_msg = implode('|', $check_array);
-echo "check_msg=$check_msg";
 $check_sig = md5($check_msg);
 $notify_sig = $_POST['notify_sig'];
 if ($notify_sig == $check_sig) {
 	
 } else {
 	logTransaction('PAYSSION', $track_id, 'failed to validate IPN');
+	header('HTTP/1.0 406 Not Acceptable');
 	exit();
 }
 
 if ($state == 'completed') {
-    $invoiceid = checkCbInvoiceID($track_id, $GATEWAY["name"]); # Checks invoice ID is a valid invoice number or ends processing
-    //checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
-    $table  = "tblaccounts";
-    $fields = "transid";
-    $where  = array("transid" => $transid);
-    $result = select_query($table, $fields, $where);
-    $data   = mysql_fetch_array($result);
-    if (!$data) {
-        addInvoicePayment($invoiceid, $transid, $amount, $fee, $gatewaymodule);
-        logTransaction($GATEWAY["name"], $_POST, "Successful");
-    }
+	echo "complete:" . $gatewayModuleName . $track_id;
+    $invoiceid = checkCbInvoiceID($track_id, $gatewayModuleName); # Checks invoice ID is a valid invoice number or ends processing
+    echo "invoiceid=$invoiceid";
+    checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
+    echo "checkCbTransID";
+    addInvoicePayment($invoiceid, $transid, $amount, $fee, $gatewayModuleName);
+    logTransaction('PAYSSION', $_POST, "Successful");
     echo "success";
 } else {
-    echo 'faild';
+    echo 'not paid';
 }
 
 
