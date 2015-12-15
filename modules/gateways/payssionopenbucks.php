@@ -11,11 +11,11 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssionmolpay_config() {
+function payssionopenbucks_config() {
 	return Payssion::getConfig('Openbucks');
 }
 
-function payssionmolpay_link($params) {
-	return Payssion::getLink($params, 'opebucks');
+function payssionopenbucks_link($params) {
+	return Payssion::getLink($params, 'openbucks');
 }
 ?>
