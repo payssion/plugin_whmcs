@@ -34,7 +34,7 @@ $track_id = $_POST['track_id'];
 $sub_track_id = $_POST['sub_track_id'];
 $state = $_POST['state'];
 $transid = $_POST['transaction_id'];
-$fee = $_POST['total'] - $_POST['net'];
+$fee = $_POST['fee'];
 
 $check_array = array(
 		Payssion::$_api_key,
