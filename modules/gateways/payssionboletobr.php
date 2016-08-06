@@ -12,7 +12,7 @@ Release date: 11/16/2015
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
 function payssionboletobr_config() {
-	return Payssion::getConfig('Boleto');
+	return Payssion::getConfig('Boleto Brasil');
 }
 
 function payssionboletobr_link($params) {
