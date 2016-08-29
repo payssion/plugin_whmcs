@@ -12,7 +12,7 @@ Release date: 11/16/2015
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
 function payssionwebmoney_config() {
-	return Payssion::getConfig('webmoney');
+	return Payssion::getConfig('WebMoney');
 }
 
 function payssionwebmoney_link($params) {
