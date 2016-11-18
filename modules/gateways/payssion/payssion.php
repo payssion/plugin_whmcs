@@ -36,7 +36,7 @@ class Payssion {
 	public static function getLink(&$params, $pm_id) {
 		$address = $params['clientdetails']['address1'].' '.$params['clientdetails']['address2'];
 		$url = '';
-		if ($params["payssion_testmode_$pm_id"] == 'on') {
+		if ($params['testmode'] == 'on') {
 			$url = 'http://sandbox.payssion.com/payment/create.html';
 		} else {
 			$url = 'https://www.payssion.com/payment/create.html';
