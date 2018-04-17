@@ -7,6 +7,6 @@ PAYSSION Payment Gateway Module for WHMCS
 2. Copy over _<b>modules</b>_ folders to your WHMCS root.
 3. Login to WHMCS as Administrator
 4. Go to Setup > Payments > Payment Gateways in the main menu
-5. Select "All payment gateways" tab and clock on PAYSSION
-6. Fill in API Key and Secret Key which you can find at your Payssion account.
+5. Select "All payment gateways" tab and you can find all Payssion's payment methods ending with "via Payssion".
+6. Click the payment method you'd like to activate, and change it if needed.
 7. Save changes.
