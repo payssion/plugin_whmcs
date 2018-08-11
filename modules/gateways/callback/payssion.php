@@ -63,6 +63,10 @@ if ($state == 'completed') {
     echo "invoiceid=$invoiceid";
     checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
     echo "checkCbTransID";
+    if (array_key_exists('currency_settle', $_POST)) {
+    	$amount = $_POST['amount_local'];
+    	$fee = 0;
+    }
     addInvoicePayment($invoiceid, $transid, $amount, $fee, $gatewayModuleName);
     logTransaction('PAYSSION', $_POST, "Successful");
     echo "success";
