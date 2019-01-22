@@ -18,4 +18,9 @@ function payssionalipaycn_config() {
 function payssionalipaycn_link($params) {
 	return Payssion::getLink($params, 'alipay_cn');
 }
+
+function payssionalipaycn_refund($params) {
+	return Payssion::refund($params);
+}
+
 ?>

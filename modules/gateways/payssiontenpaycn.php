@@ -18,4 +18,8 @@ function payssiontenpaycn_config() {
 function payssiontenpaycn_link($params) {
 	return Payssion::getLink($params, 'tenpay_cn');
 }
+
+function payssiontenpaycn_refund($params) {
+	return Payssion::refund($params);
+}
 ?>

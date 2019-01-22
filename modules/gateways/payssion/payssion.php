@@ -82,5 +82,78 @@ class Payssion {
 		</form>';
 		return $code;
 	}
+	
+	/**
+	 * Refund transaction.
+	 *
+	 * Called when a refund is requested for a previously successful transaction.
+	 *
+	 * @param array $params Payment Gateway Module Parameters
+	 *
+	 * @see https://developers.whmcs.com/payment-gateways/refunds/
+	 *
+	 * @return array Transaction response status
+	 */
+	public static function refund($params) {
+		$url = '';
+		if ($params['testmode'] == 'on') {
+			$url = 'http://sandbox.payssion.com/api/v1/refunds';
+		} else {
+			$url = 'https://www.payssion.com/api/v1/refunds';
+		}
+		
+		$transaction_id = $params['transid'];
+		$amount = $params['amount'];
+		$currency = $params['currency'];
+		$request_data = array(
+			'api_key' => self::$_api_key,
+			'transaction_id' => $transaction_id,
+			'amount' => $amount,
+			'currency' => $currency,
+		);
+		$request_data['api_sig'] = md5(self::$_api_key . "|$transaction_id|$amount|$currency|" . self::$_secret_key);
+		
+		$ch = curl_init($url);
+		curl_setopt($ch,CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request_data));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($curl);
+		
+		// Check HTTP status code
+		$raw_data = '';
+		$errno = curl_errno($ch);
+		$status = 'error';
+		$trans_id = '';
+		$fees = '';
+		if (!$errno) {
+			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			switch ($http_code) {
+				case 200:  # OK
+					$response = json_decode($response, true);
+					$raw_data = $response;
+					if (200 == $response['result_code']) {
+						$status = 'success';
+						$trans_id = $response['refund']['transaction_id'];
+					}
+					break;
+				default:
+					$raw_data = "Unexpected HTTP code: $http_code, response:$response";
+			}
+		} else {
+			$raw_data = "Failed to send request: $errno " . curl_error($ch);
+		}
+		curl_close ($curl);
+		
+		return array(
+				// 'success' if successful, otherwise 'declined', 'error' for failure
+				'status' => $status,
+				// Data to be recorded in the gateway log - can be a string or array
+				'rawdata' => $raw_data,
+				// Unique Transaction ID for the refund transaction
+				'transid' => $trans_id,
+				// Optional fee amount for the fee value refunded
+				//'fees' => $fees,
+		);
+	}
 }
 ?>
