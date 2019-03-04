@@ -117,15 +117,19 @@ class Payssion {
 		curl_setopt($ch,CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request_data));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$response = curl_exec($curl);
+		$response = curl_exec($ch);
 		
 		// Check HTTP status code
 		$raw_data = '';
-		$errno = curl_errno($ch);
+		
 		$status = 'error';
 		$trans_id = '';
 		$fees = '';
-		if (!$errno) {
+		
+		if (false === $response) {
+			$errno = curl_errno($ch);
+			$raw_data = "Failed to send request: $errno " . curl_error($ch);
+		} else {
 			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			switch ($http_code) {
 				case 200:  # OK
@@ -139,10 +143,9 @@ class Payssion {
 				default:
 					$raw_data = "Unexpected HTTP code: $http_code, response:$response";
 			}
-		} else {
-			$raw_data = "Failed to send request: $errno " . curl_error($ch);
 		}
-		curl_close ($curl);
+		
+		curl_close($ch);
 		
 		return array(
 				// 'success' if successful, otherwise 'declined', 'error' for failure
