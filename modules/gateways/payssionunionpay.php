@@ -18,4 +18,8 @@ function payssionunionpay_config() {
 function payssionunionpay_link($params) {
 	return Payssion::getLink($params, 'unionpay');
 }
+
+function payssionunionpay_refund($params) {
+	return Payssion::refund($params);
+}
 ?>
