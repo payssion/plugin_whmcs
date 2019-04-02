@@ -18,4 +18,8 @@ function payssionwebmoney_config() {
 function payssionwebmoney_link($params) {
 	return Payssion::getLink($params, 'webmoney');
 }
+
+function payssionwebmoney_refund($params) {
+	return Payssion::refund($params);
+}
 ?>
