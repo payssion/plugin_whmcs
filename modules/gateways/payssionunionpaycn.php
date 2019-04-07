@@ -11,15 +11,15 @@ Release date: 11/16/2015
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssionunionpay_config() {
+function payssionunionpaycn_config() {
 	return Payssion::getConfig('Unionpay');
 }
 
-function payssionunionpay_link($params) {
+function payssionunionpaycn_link($params) {
 	return Payssion::getLink($params, 'unionpay_cn');
 }
 
-function payssionunionpay_refund($params) {
+function payssionunionpaycn_refund($params) {
 	return Payssion::refund($params);
 }
 ?>

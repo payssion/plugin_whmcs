@@ -21,13 +21,8 @@ $pm_name = str_replace('_', '', $pm_id);
 $gatewayModuleName = "payssion" . $pm_name;
 $GATEWAY = getGatewayVariables($gatewayModuleName);
 if (!$GATEWAY || !$GATEWAY["type"]) {
-	$pm_name = substr($pm_id, 0, strpos($pm_id, '_'));
-	$gatewayModuleName = "payssion" . $pm_name;
-	$GATEWAY = getGatewayVariables($gatewayModuleName);
-	if (!$GATEWAY || !$GATEWAY["type"]) {
-		logTransaction('PAYSSION', '', 'Module Not Activated');
-		die("Module Not Activated");
-	}
+	logTransaction('PAYSSION', '', 'Module Not Activated');
+	die("Module Not Activated");
 }
 
 // Assign payment notification values to local variables
