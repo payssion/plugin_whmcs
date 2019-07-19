@@ -14,7 +14,12 @@ require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 function payssionepsat_config() {
 	return Payssion::getConfig('EPS');
 }
+
 function payssionepsat_link($params) {
 	return Payssion::getLink($params, 'eps_at');
+}
+
+function payssionepsat_refund($params) {
+	return Payssion::refund($params);
 }
 ?>

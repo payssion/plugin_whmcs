@@ -18,4 +18,8 @@ function payssionsofort_config() {
 function payssionsofort_link($params) {
 	return Payssion::getLink($params, 'sofort');
 }
+
+function payssionsofort_refund($params) {
+	return Payssion::refund($params);
+}
 ?>

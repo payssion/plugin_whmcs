@@ -14,7 +14,12 @@ require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 function payssiondotpaypl_config() {
 	return Payssion::getConfig('Dotpay');
 }
+
 function payssiondotpaypl_link($params) {
 	return Payssion::getLink($params, 'dotpay_pl');
+}
+
+function payssiondotpaypl_refund($params) {
+	return Payssion::refund($params);
 }
 ?>

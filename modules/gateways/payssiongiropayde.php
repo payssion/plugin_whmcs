@@ -17,4 +17,8 @@ function payssiongiropayde_config() {
 function payssiongiropayde_link($params) {
 	return Payssion::getLink($params, 'giropay_de');
 }
+
+function payssiongiropayde_refund($params) {
+	return Payssion::refund($params);
+}
 ?>

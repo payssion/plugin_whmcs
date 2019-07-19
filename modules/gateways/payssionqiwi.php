@@ -18,4 +18,8 @@ function payssionqiwi_config() {
 function payssionqiwi_link($params) {
 	return Payssion::getLink($params, 'qiwi');
 }
+
+function payssionqiwi_refund($params) {
+	return Payssion::refund($params);
+}
 ?>

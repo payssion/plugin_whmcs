@@ -14,7 +14,12 @@ require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 function payssionidealnl_config() {
 	return Payssion::getConfig('iDeal');
 }
+
 function payssionidealnl_link($params) {
 	return Payssion::getLink($params, 'ideal_nl');
+}
+
+function payssionidealnl_refund($params) {
+	return Payssion::refund($params);
 }
 ?>

@@ -14,7 +14,12 @@ require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 function payssionbancontactbe_config() {
 	return Payssion::getConfig('Bancontact');
 }
+
 function payssionbancontactbe_link($params) {
 	return Payssion::getLink($params, 'bancontact_be');
+}
+
+function payssionbancontactbe_refund($params) {
+	return Payssion::refund($params);
 }
 ?>

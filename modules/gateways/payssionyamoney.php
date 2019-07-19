@@ -18,4 +18,8 @@ function payssionyamoney_config() {
 function payssionyamoney_link($params) {
 	return Payssion::getLink($params, 'yamoney');
 }
+
+function payssionyamoney_refund($params) {
+	return Payssion::refund($params);
+}
 ?>

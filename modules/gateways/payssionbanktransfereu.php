@@ -15,4 +15,8 @@ function payssionbanktransfereu_config() {
 function payssionbanktransfereu_link($params) {
 	return Payssion::getLink($params, 'banktransfer_eu');
 }
+
+function payssionbanktransfereu_refund($params) {
+	return Payssion::refund($params);
+}
 ?>
