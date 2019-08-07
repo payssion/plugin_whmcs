@@ -18,9 +18,9 @@ Release date: 11/16/2015
 $pm_id = $_POST['pm_id'];
 $pm_name = str_replace('_', '', $pm_id);
 
-$gatewayModuleName = "payssion" . $pm_name;
-$GATEWAY = getGatewayVariables($gatewayModuleName);
-if (!$GATEWAY || !$GATEWAY["type"]) {
+$gatewaymodule = "payssion" . $pm_name;
+$gateway = getGatewayVariables($gatewaymodule);
+if (!$gateway || !$gateway["type"]) {
 	logTransaction('PAYSSION', '', 'Module Not Activated');
 	die("Module Not Activated");
 }
@@ -56,33 +56,47 @@ if ($notify_sig == $check_sig) {
 	exit();
 }
 
-if ('completed' == $state) {
-	echo "complete:" . $gatewayModuleName . $track_id;
-    $invoiceid = checkCbInvoiceID($track_id, $gatewayModuleName); # Checks invoice ID is a valid invoice number or ends processing
-    echo "invoiceid=$invoiceid";
-    checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
-    echo "checkCbTransID";
-    if (array_key_exists('currency_settle', $_POST)) {
-    	$amount = $_POST['amount_local'];
-    	$fee = 0;
-    }
-    addInvoicePayment($invoiceid, $transid, $amount, $fee, $gatewayModuleName);
-    logTransaction('PAYSSION', $_POST, "Successful");
-    echo "success";
-} else if ('paid_partial' == $state || 'paid_more' == $state) {
-	echo "$state:" . $gatewayModuleName . $track_id;
-    $invoiceid = checkCbInvoiceID($track_id, $gatewayModuleName); # Checks invoice ID is a valid invoice number or ends processing
-    echo "invoiceid=$invoiceid";
-    checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
-    echo "checkCbTransID";
-    if (array_key_exists('currency_settle', $_POST)) {
-    	$paid = $paid / $amount * $_POST['amount_local'];
-    	$paid = round($paid, 2);
-    	$fee = 0;
-    }
-    addInvoicePayment($invoiceid, $transid, $paid, $fee, $gatewayModuleName);
-    logTransaction('PAYSSION', $_POST, "Successful $state");
-    echo "success";
+if ($paid > 0) {
+	echo "$state:" . $gatewaymodule . $track_id;
+	$invoiceid = checkCbInvoiceID($track_id, $gatewaymodule); # Checks invoice ID is a valid invoice number or ends processing
+	echo "invoiceid=$invoiceid";
+	checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
+	echo "checkCbTransID";
+	
+	if ('completed' == $state) {
+		if (array_key_exists('currency_settle', $_POST)) {
+			$paid = $_POST['amount_local'];
+			$fee = 0;
+		}
+	} else if ('paid_partial' == $state || 'paid_more' == $state) {
+		if (array_key_exists('currency_settle', $_POST)) {
+			$paid = $paid / $amount * $_POST['amount_local'];
+			$paid = round($paid, 2);
+			$fee = 0;
+		}
+	} else {
+		echo "$state not correct";
+		exit();
+	}
+	
+	// Convert currency
+	if (isset($gateway['convertto'])) {
+		$result = mysql_query("
+            SELECT rate FROM tblcurrencies
+            WHERE code = '" . mysql_real_escape_string($currency) . "'
+        ");
+		$rate = '';
+		while ($row = mysql_fetch_array($result)) {
+			$rate = $row['rate'];
+		}
+		$paid *= $rate;
+	}
+	
+	// Formats amount in cent units to string with dot separator
+	$paid = number_format($paid, 2, '.', '');
+	addInvoicePayment($invoiceid, $transid, $paid, $fee, $gatewaymodule);
+	logTransaction('PAYSSION', $_POST, "Successful $state:$paid");
+	echo "success";
 } else {
     echo 'not paid';
 }
