@@ -71,7 +71,6 @@ if ($paid > 0) {
 	} else if ('paid_partial' == $state || 'paid_more' == $state) {
 		if (array_key_exists('currency_settle', $_POST)) {
 			$paid = $paid / $amount * $_POST['amount_local'];
-			$paid = round($paid, 2);
 			$fee = 0;
 		}
 	} else {
@@ -89,14 +88,14 @@ if ($paid > 0) {
 		while ($row = mysql_fetch_array($result)) {
 			$rate = $row['rate'];
 		}
-		$paid *= $rate;
+		$paid /= $rate;
 	}
 	
 	// Formats amount in cent units to string with dot separator
 	$paid = number_format($paid, 2, '.', '');
 	addInvoicePayment($invoiceid, $transid, $paid, $fee, $gatewaymodule);
-	logTransaction('PAYSSION', $_POST, "Successful $state:$paid");
-	echo "success";
+	logTransaction('PAYSSION', $_POST, "Successful $state:$paid:$rate");
+	echo "success:$state:$paid:$rate";
 } else {
     echo 'not paid';
 }
