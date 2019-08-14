@@ -14,6 +14,7 @@ Release date: 11/16/2015
 @require_once ("../../../includes/gatewayfunctions.php");
 @require_once ("../../../includes/invoicefunctions.php");
 @require_once ("../payssion/payssion.php");
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 $pm_id = $_POST['pm_id'];
 $pm_name = str_replace('_', '', $pm_id);
@@ -57,9 +58,10 @@ if ($notify_sig == $check_sig) {
 }
 
 if ($paid > 0) {
+	
 	echo "$state:" . $gatewaymodule . $track_id;
 	$invoiceid = checkCbInvoiceID($track_id, $gatewaymodule); # Checks invoice ID is a valid invoice number or ends processing
-	echo "invoiceid=$invoiceid";
+	echo "invoiceid=$invoiceid:" . print_r($invoice, true);
 	checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
 	echo "checkCbTransID";
 	
@@ -80,22 +82,17 @@ if ($paid > 0) {
 	
 	// Convert currency
 	if (isset($gateway['convertto'])) {
-		$result = mysql_query("
-            SELECT rate FROM tblcurrencies
-            WHERE code = '" . mysql_real_escape_string($currency) . "'
-        ");
-		$rate = '';
-		while ($row = mysql_fetch_array($result)) {
-			$rate = $row['rate'];
-		}
-		$paid /= $rate;
+		$data = Capsule::table("tblinvoices")->where("id", $invoiceid)->get()[0];
+		$userid = $data->userid;
+		$currency = getCurrency($userid);
+	    $paid = convertCurrency($paid, $gateway['convertto'], $currency["id"]);
 	}
 	
 	// Formats amount in cent units to string with dot separator
 	$paid = number_format($paid, 2, '.', '');
 	addInvoicePayment($invoiceid, $transid, $paid, $fee, $gatewaymodule);
-	logTransaction('PAYSSION', $_POST, "Successful $state:$paid:$rate");
-	echo "success:$state:$paid:$rate";
+	logTransaction('PAYSSION', $_POST, "Successful $state:$paid");
+	echo "success:$state:$paid";
 } else {
     echo 'not paid';
 }
