@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: South Korea Credit Card	 for WHMCS
+Plugin Name: South Korea Credit Card for WHMCS
 Author: Payssion
 Author URI: https://www.payssion.com
 */
