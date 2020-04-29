@@ -61,19 +61,21 @@ if ($paid > 0) {
 	
 	echo "$state:" . $gatewaymodule . $track_id;
 	$invoiceid = checkCbInvoiceID($track_id, $gatewaymodule); # Checks invoice ID is a valid invoice number or ends processing
-	echo "invoiceid=$invoiceid:" . print_r($invoice, true);
+	echo "invoiceid=$invoiceid:";
 	checkCbTransID($transid); # Checks transaction number isn't already in the database and ends processing if it does
 	echo "checkCbTransID";
 	
 	if ('completed' == $state) {
 		if (array_key_exists('currency_settle', $_POST)) {
 			$paid = $_POST['amount_local'];
-			$fee = 0;
+			$currency = $_POST['currency_local'];
+			$fee = $fee / $amount * $_POST['amount_local'];;
 		}
 	} else if ('paid_partial' == $state || 'paid_more' == $state) {
 		if (array_key_exists('currency_settle', $_POST)) {
 			$paid = $paid / $amount * $_POST['amount_local'];
-			$fee = 0;
+			$currency = $_POST['currency_local'];
+			$fee = $fee / $amount * $_POST['amount_local'];
 		}
 	} else {
 		echo "$state not correct";
@@ -81,11 +83,28 @@ if ($paid > 0) {
 	}
 	
 	// Convert currency
+	$invoice = Capsule::table("tblinvoices")->where("id", $invoiceid)->get()[0];
+	$currency_user = getCurrency($invoice->userid);
 	if (isset($gateway['convertto'])) {
-		$data = Capsule::table("tblinvoices")->where("id", $invoiceid)->get()[0];
-		$userid = $data->userid;
-		$currency = getCurrency($userid);
-	    $paid = convertCurrency($paid, $gateway['convertto'], $currency["id"]);
+		$currency_converto = getCurrency(0, $gateway['convertto']);
+		echo "currency=$currency, user currency=" . $currency_user['code'] . ' convert currency=' . $currency_converto['code'];
+		if ($currency != $currency_user['code']) {
+			$paid_original = $paid;
+			$paid = convertCurrency($paid, $currency, $currency_user['id']);
+			if ($invoice->total != $paid && 'completed' == $state) {
+				echo 'paid!=' . $invoice->total;
+				$total_original = convertCurrency($invoice->total, $currency_user['id'], $currency);
+				echo "total_original=$total_original";
+				if ($paid_original == $total_original || abs($total_original - $paid_original) < 0.0101) {
+					$paid = $invoice->total;
+				}
+			}
+			echo "paid=$paid";
+		} else {
+			echo 'currency == user currency';
+		}
+	} else {
+		echo 'convertto was not set';
 	}
 	
 	// Formats amount in cent units to string with dot separator
