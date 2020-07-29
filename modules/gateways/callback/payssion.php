@@ -58,7 +58,6 @@ if ($notify_sig == $check_sig) {
 }
 
 if ($paid > 0) {
-	
 	echo "$state:" . $gatewaymodule . $track_id;
 	$invoiceid = checkCbInvoiceID($track_id, $gatewaymodule); # Checks invoice ID is a valid invoice number or ends processing
 	echo "invoiceid=$invoiceid:";
@@ -81,7 +80,7 @@ if ($paid > 0) {
 		echo "$state not correct";
 		exit();
 	}
-	
+
 	// Convert currency
 	$invoice = Capsule::table("tblinvoices")->where("id", $invoiceid)->get()[0];
 	$currency_user = getCurrency($invoice->userid);
@@ -90,13 +89,26 @@ if ($paid > 0) {
 		echo "currency=$currency, user currency=" . $currency_user['code'] . ' convert currency=' . $currency_converto['code'];
 		if ($currency != $currency_user['code']) {
 			$paid_original = $paid;
-			$paid = convertCurrency($paid, $currency, $currency_user['id']);
+			$result = mysql_fetch_array(select_query("tblcurrencies", "id", array("code" => $currency)));
+			if ($result && $result['id']) {
+			    echo "found currency id=" . $result['id'];
+			    $currency = $result;
+			}
+			
+			$paid = convertCurrency($paid, $currency['id'], $currency_user['id']);
 			if ($invoice->total != $paid && 'completed' == $state) {
 				echo 'paid!=' . $invoice->total;
-				$total_original = convertCurrency($invoice->total, $currency_user['id'], $currency);
+				$total_original = convertCurrency($invoice->total, $currency_user['id'], $currency['id']);
 				echo "total_original=$total_original";
 				if ($paid_original == $total_original || abs($total_original - $paid_original) < 0.0101) {
 					$paid = $invoice->total;
+				} else if ($paid_original > $total_original) {
+				    if ('paid_more' != $state) {
+				        header('HTTP/1.0 406 Not Acceptable');
+				        logTransaction('PAYSSION', $_POST, "failed $state:$paid");
+				        echo "failed: $paid_original > $total_original";
+				        exit();
+				    }
 				}
 			}
 			echo "paid=$paid";
