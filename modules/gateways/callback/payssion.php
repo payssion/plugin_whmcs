@@ -22,8 +22,19 @@ $pm_name = str_replace('_', '', $pm_id);
 $gatewaymodule = "payssion" . $pm_name;
 $gateway = getGatewayVariables($gatewaymodule);
 if (!$gateway || !$gateway["type"]) {
-	logTransaction('PAYSSION', '', 'Module Not Activated');
-	die("Module Not Activated");
+    if ($pm_name != $pm_id) {
+        $pm_name_list = explode('_', $pm_id);
+        $pm_name = $pm_name_list[0];
+        $gatewaymodule = "payssion" . $pm_name;
+        $gateway = getGatewayVariables($gatewaymodule);
+        if (!$gateway || !$gateway["type"]) {
+            logTransaction('PAYSSION', '', 'Module Not Activated');
+            die("Module Not Activated");
+        }
+    } else {
+        logTransaction('PAYSSION', '', 'Module Not Activated');
+        die("Module Not Activated");
+    }
 }
 
 // Assign payment notification values to local variables
@@ -54,6 +65,7 @@ if ($notify_sig == $check_sig) {
 } else {
 	logTransaction('PAYSSION', $track_id, 'failed to validate IPN');
 	header('HTTP/1.0 406 Not Acceptable');
+	echo "check_msg=$check_msg, check_sig=$check_sig";
 	exit();
 }
 
