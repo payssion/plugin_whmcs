@@ -22,18 +22,19 @@ $pm_name = str_replace('_', '', $pm_id);
 $gatewaymodule = "payssion" . $pm_name;
 $gateway = getGatewayVariables($gatewaymodule);
 if (!$gateway || !$gateway["type"]) {
+    $msg_not_activated = "$gatewaymodule Module Not Activated";
     if ($pm_name != $pm_id) {
         $pm_name_list = explode('_', $pm_id);
         $pm_name = $pm_name_list[0];
         $gatewaymodule = "payssion" . $pm_name;
         $gateway = getGatewayVariables($gatewaymodule);
         if (!$gateway || !$gateway["type"]) {
-            logTransaction('PAYSSION', '', 'Module Not Activated');
-            die("Module Not Activated");
+            logTransaction('PAYSSION', '', $msg_not_activated);
+            die($msg_not_activated);
         }
     } else {
-        logTransaction('PAYSSION', '', 'Module Not Activated');
-        die("Module Not Activated");
+        logTransaction('PAYSSION', '', $msg_not_activated);
+        die($msg_not_activated);
     }
 }
 
