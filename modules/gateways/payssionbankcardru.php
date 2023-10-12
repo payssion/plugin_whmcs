@@ -12,6 +12,10 @@ function payssionbankcardru_config() {
 }
 
 function payssionbankcardru_link($params) {
-	return Payssion::getLink($params, 'bankcard_ru');
+	return Payssion::getLink($params, 'card_ru');
+}
+
+function payssionbankcardru_refund($params) {
+    return Payssion::refund($params);
 }
 ?>

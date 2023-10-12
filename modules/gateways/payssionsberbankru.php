@@ -1,20 +1,22 @@
 <?php
 /*
-Plugin Name: Sberbank for WHMCS
-Description: Sberbank payment gateway plugin for WHMCS
-Version: 1.0
-Compatible with: WHMCS 5.3.14, 6.0.2
-Author: Payssion
-Author URI: https://www.payssion.com
+ Plugin Name: SberPay for WHMCS
+ Description: SberPay payment gateway plugin for WHMCS
+ Author: Payssion
+ Author URI: https://www.payssion.com
 */
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
 function payssionsberbankru_config() {
-	return Payssion::getConfig('Sberbank');
+	return Payssion::getConfig('SberPay');
 }
 
 function payssionsberbankru_link($params) {
-	return Payssion::getLink($params, 'sberbank_ru');
+	return Payssion::getLink($params, 'sberpay_ru');
+}
+
+function payssionsberbankru_refund($params) {
+    return Payssion::refund($params);
 }
 ?>
