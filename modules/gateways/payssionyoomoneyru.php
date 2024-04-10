@@ -8,15 +8,15 @@
 
 require_once realpath(dirname(__FILE__)) . "/payssion/payssion.php";
 
-function payssionyamoney_config() {
+function payssionyoomoneyru_config() {
 	return Payssion::getConfig('YooMoney');
 }
 
-function payssionyamoney_link($params) {
+function payssionyoomoneyru_link($params) {
 	return Payssion::getLink($params, 'yoomoney_ru');
 }
 
-function payssionyamoney_refund($params) {
+function payssionyoomoneyru_refund($params) {
 	return Payssion::refund($params);
 }
 ?>
