@@ -66,7 +66,7 @@ if ($notify_sig == $check_sig) {
 } else {
 	logTransaction('PAYSSION', $track_id, 'failed to validate IPN');
 	header('HTTP/1.0 406 Not Acceptable');
-	echo "check_msg=$check_msg, check_sig=$check_sig";
+	echo "invalid notify_sig";
 	exit();
 }
 
