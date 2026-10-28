@@ -2,11 +2,6 @@
 /*
 Plugin Name: payssion for WHMCS
 Description: payssion payment gateway plugin for WHMCS
-Version: 1.0
-Compatible with: WHMCS 5.3.14, 6.0.2
-Author: payssion
-Author URI: https://www.payssion.com
-Release date: 11/16/2015
 */
 
 @require_once ("../../../init.php");
